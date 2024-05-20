@@ -18,3 +18,27 @@ if __name__ == "__main__":
 
     piece = s.union()(top, main_body)
     s.scad_render_to_file(piece)
+
+    outer_outer_d = 80
+    inner_outer_d = 57
+    rescue_hole_d = 33
+    bottom_length = 20
+    surface_thickness = 2
+    weight = s.union()(
+        s.difference()(
+            s.cylinder(h=bottom_length, d=outer_outer_d, _fn=200),
+            s.cylinder(h=bottom_length, d=inner_outer_d, _fn=200),
+        ),
+    )
+    surface = s.down(surface_thickness)(
+        s.difference()(
+            s.cylinder(h=surface_thickness, d=outer_outer_d, _fn=200),
+            s.cylinder(h=surface_thickness, d=rescue_hole_d, _fn=200),
+        )
+    )
+    # weight_holder = s.union()(
+    #     s.down(15)(s.cylinder(h=20, d=65)),
+    # )
+    # weight_holder = s.difference()(weight_holder, s.down(15)(s.cylinder(h=15, d=70)))
+    shape = s.union()(weight, surface)
+    s.scad_render_to_file(shape, filename="weight_holder.scad")
